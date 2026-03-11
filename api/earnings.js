@@ -14,7 +14,7 @@ const ENDPOINTS = {
   earnings:   (ticker) => `https://www.perplexity.ai/rest/finance/earnings/${ticker}`,
   financials: (ticker) => `https://www.perplexity.ai/rest/finance/financials/${ticker}`,
   news:       (ticker) => `https://www.perplexity.ai/rest/finance/news/${ticker}`,
-  profile:    (ticker) => `https://www.perplexity.ai/rest/finance/profile/${ticker}/description`,
+  profile:    (ticker) => `https://www.perplexity.ai/rest/finance/profile/${ticker}`,
 }
 
 export default async function handler(req, res) {
