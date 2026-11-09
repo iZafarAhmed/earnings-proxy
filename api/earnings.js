@@ -30,12 +30,21 @@ export default async function handler(req, res) {
   if (!type) return res.status(400).json({ error: 'type is required. e.g. ?type=earnings or ?type=financials' })
   if (!ENDPOINTS[type]) return res.status(400).json({ error: `Unknown type "${type}". Available: ${Object.keys(ENDPOINTS).join(', ')}` })
 
-  try {
+    try {
     const url = ENDPOINTS[type](ticker.toUpperCase())
     const response = await fetch(url, { headers: HEADERS })
-    const data = await response.json()
-    res.status(200).json(data)
+    const text = await response.text()
+
+    try {
+      return res.status(200).json(JSON.parse(text))
+    } catch {
+      return res.status(502).json({
+        error: 'Upstream did not return JSON',
+        status: response.status,
+        contentType: response.headers.get('content-type'),
+        preview: text.slice(0, 300),
+      })
+    }
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
-}
